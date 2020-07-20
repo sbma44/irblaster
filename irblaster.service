@@ -1,0 +1,11 @@
+[Unit]
+Description=IRBlaster bridge
+
+[Service]
+Restart=on-failure
+RestartSec=30
+Type=simple
+ExecStart=/home/pi/irblaster/.venv/bin/python3 /home/pi/irblaster/irblaster.py
+
+[Install]
+WantedBy=multi-user.target

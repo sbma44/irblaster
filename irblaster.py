@@ -25,7 +25,8 @@ def send(code):
         code = 'plain={}'.format(code)
     else:
         code = 'code={}'.format(code)
-    requests.get('http://{}/msg?simple=1&pass={}&{}'.format(IRBLASTER_SERVER, IRBLASTER_PASSWORD, code))
+    url = 'http://{}/msg?simple=1&pass={}&{}'.format(IRBLASTER_SERVER, IRBLASTER_PASSWORD, code)
+    requests.get(url)
 
 class GetHandler(BaseHTTPRequestHandler):
 
@@ -60,10 +61,14 @@ class GetHandler(BaseHTTPRequestHandler):
         elif d.get('device') == 'screen':
             if d.get('action') == 'down':
                 syslog.syslog('screen down')
-                send(SCREEN_DOWN)
+                for i in range(4):
+                    send(SCREEN_DOWN)
+                    time.sleep(0.5)
             elif d.get('action') == 'up':
                 syslog.syslog('screen up')
-                send(SCREEN_UP)
+                for i in range(4):
+                    send(SCREEN_UP)
+                    time.sleep(0.5)
 
         self.send_response(200)
         self.send_header("Content-Type", "text/ascii")

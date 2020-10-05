@@ -37,6 +37,14 @@ class GetHandler(BaseHTTPRequestHandler):
                 d[k] = d[k][0]
         d['device'] = d['/blaster?device']
 
+        self.send_response(200)
+        self.send_header("Content-Type", "text/ascii")
+        self.send_header("Content-Length", "2")
+        self.end_headers()
+        self.wfile.write("OK".encode("utf-8"))
+        self.finish()
+        self.connection.close()
+
         if d.get('device') == 'projector':
             if d.get('action') == 'on':
                 syslog.syslog('projector on')
@@ -70,11 +78,6 @@ class GetHandler(BaseHTTPRequestHandler):
                     send(SCREEN_UP)
                     time.sleep(0.5)
 
-        self.send_response(200)
-        self.send_header("Content-Type", "text/ascii")
-        self.send_header("Content-Length", "2")
-        self.end_headers()
-        self.wfile.write("OK".encode("utf-8"))
 
 if __name__ == '__main__':
     from http.server import HTTPServer
